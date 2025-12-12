@@ -56,7 +56,7 @@ A C++ implementation for simulating future currency exchange rates using Monte C
 ```bash
 git clone https://github.com/your-username/currency-monte-carlo.git
 cd currency-monte-carlo
-2. Install Dependencies
+### 2. Install Dependencies
 Ubuntu/Debian
 bash
 sudo apt-get update
