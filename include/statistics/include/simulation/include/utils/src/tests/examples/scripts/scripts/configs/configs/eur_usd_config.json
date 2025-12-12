@@ -1,0 +1,25 @@
+{
+  "currency_pair": "EUR/USD",
+  "simulation": {
+    "model": "GBM",
+    "parameters": {
+      "initial_price": 1.10,
+      "drift": 0.02,
+      "volatility": 0.15,
+      "risk_free_rate": 0.03
+    },
+    "simulation_params": {
+      "num_simulations": 50000,
+      "num_steps": 180,
+      "time_horizon_days": 180,
+      "dt": 1.0/252.0
+    },
+    "random": {
+      "seed": 42,
+      "generator": "normal"
+    },
+    "output": {
+      "prefix": "eur_usd_6month_forecast"
+    }
+  }
+}
