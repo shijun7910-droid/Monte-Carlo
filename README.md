@@ -13,7 +13,7 @@ Matplotlib
 #Installation & Usage
 1. Clone the Project
 bash
-git clone https://github.com/yourusername/project-name.git
+git clone https://github.com/shijun7910-droid/Monte-Carlo
 cd project-name
 2. Install Dependencies
 bash
@@ -23,12 +23,13 @@ bash
 python main.py
 Project Structure
 text
-├── main.py              
-├── monte_carlo.py      
-├── data_loader.py      
-├── visualization.py    
-├── README.md           
-└── requirements.txt   
+main.py              
+monte_carlo.py      
+data_loader.py      
+visualization.py    
+README.md           
+requirements.txt
+
 Main Features
 Data Acquisition: Fetch historical exchange rate data from Yahoo Finance
 Monte Carlo Simulation: Forecast exchange rates based on Geometric Brownian Motion
