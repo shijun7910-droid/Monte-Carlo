@@ -1,5 +1,5 @@
 #Project Author
-Dai Shijun
+Дай Шицзюнь
 
 #Project Description
 Use Monte Carlo methods to simulate and forecast exchange rate movements, providing reference for risk management.
