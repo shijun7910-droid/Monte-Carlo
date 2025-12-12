@@ -1,217 +1,69 @@
-Моделирование курса валют методом Монте-Карло
+Currency Simulation Using Monte Carlo Method
 https://img.shields.io/badge/License-MIT-yellow.svg
 https://img.shields.io/badge/C++-17-blue.svg
 https://img.shields.io/badge/CMake-3.10+-064f8c.svg
+https://img.shields.io/badge/build-passing-brightgreen.svg
+https://img.shields.io/badge/OpenMP-enabled-blue.svg
 
-Проект реализует моделирование будущих значений курсов валют с использованием метода Монте-Карло на языке C++.
+A C++ implementation for simulating future currency exchange rates using Monte Carlo methods with parallel computing capabilities.
 
-📋 Оглавление
-Особенности
+📋 Table of Contents
+Features
 
-Требования
+Requirements
 
-Установка и сборка
+Installation & Build
 
-Использование
+Usage
 
-Структура проекта
+Project Structure
 
-[Математическая модель](#математическая модель)
+Mathematical Models
 
-Примеры
+Examples
 
-Тестирование
+Testing
 
-Вклад в проект
+Contributing
 
-Лицензия
+License
 
-✨ Особенности
-Реализация метода Монте-Карло для прогнозирования валютных курсов
+✨ Features
+Multiple Stochastic Models: GBM, Vasicek, Hull-White, and more
 
-Поддержка различных стохастических моделей (GBM, Модель Васичека и др.)
+High Performance: Parallel computation with OpenMP
 
-Параллельные вычисления с использованием OpenMP
+Flexible Configuration: JSON-based configuration files
 
-Экспорт результатов в форматы CSV и JSON
+Multiple Output Formats: CSV, JSON, and binary formats
 
-Визуализация результатов с помощью Python-скриптов
+Visualization Tools: Python scripts for result plotting
 
-Модульная архитектура для легкого расширения
+Statistical Analysis: VaR, CVaR, confidence intervals
 
-📦 Требования
-Компилятор C++17 (GCC 7+, Clang 5+, MSVC 2019+)
+Modular Design: Easy to extend with new models
 
-CMake 3.10+
+📦 Requirements
+Essential
+C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2019+)
 
-Библиотеки:
+CMake 3.10 or higher
 
-Eigen3 (линейная алгебра)
+Git
 
-OpenMP (параллельные вычисления, опционально)
+Libraries
+Eigen3 (linear algebra operations)
 
-nlohmann/json (работа с JSON)
+OpenMP (optional, for parallel computation)
 
-🛠 Установка и сборка
-Клонирование репозитория
-bash
-git clone https://github.com/ваш-username/currency-monte-carlo.git
-cd currency-monte-carlo
-Сборка с CMake
-bash
-mkdir build && cd build
-cmake ..
-make -j4
-Установка зависимостей
-Ubuntu/Debian
-bash
-sudo apt-get install libeigen3-dev libomp-dev
-macOS
-bash
-brew install eigen openmp
-Windows (vcpkg)
-bash
-vcpkg install eigen3
-🚀 Использование
-Базовое использование
-bash
-./monte_carlo_simulator --config config.json
-Пример конфигурационного файла
-json
-{
-    "model": "GBM",
-    "initial_price": 75.0,
-    "drift": 0.05,
-    "volatility": 0.2,
-    "time_horizon": 30,
-    "num_simulations": 10000,
-    "num_steps": 252,
-    "output_format": "csv",
-    "output_file": "results/simulation.csv"
-}
-Командные параметры
-bash
-./monte_carlo_simulator [OPTIONS]
+nlohmann/json (JSON parsing and generation)
 
-Options:
-  -h, --help                Показать справку
-  -c, --config FILE         Конфигурационный файл
-  -i, --initial-price N     Начальная цена
-  -d, --drift N             Дрейф (средняя доходность)
-  -v, --volatility N        Волатильность
-  -t, --time-horizon N      Горизонт прогноза (дни)
-  -s, --simulations N       Количество симуляций
-  --output FILE             Выходной файл
-  --format FORMAT           Формат вывода (csv/json)
-📁 Структура проекта
-text
-currency-monte-carlo/
-├── CMakeLists.txt
-├── README.md
-├── LICENSE
-├── docs/                    # Документация
-├── include/                 # Заголовочные файлы
-│   ├── models/             # Модели ценообразования
-│   ├── random/             # Генераторы случайных чисел
-│   ├── statistics/         # Статистические функции
-│   └── utils/              # Вспомогательные утилиты
-├── src/                    # Исходный код
-│   ├── main.cpp
-│   ├── models/
-│   ├── random/
-│   ├── statistics/
-│   └── utils/
-├── tests/                  # Тесты
-├── examples/               # Примеры использования
-├── scripts/                # Вспомогательные скрипты (Python для визуализации)
-├── configs/                # Конфигурационные файлы
-└── results/                # Результаты моделирования
-📊 Математическая модель
-Проект реализует несколько стохастических моделей:
+Optional
+Python 3.7+ (for visualization scripts)
 
-1. Геометрическое броуновское движение (GBM)
-text
-dS = μS dt + σS dW
-где:
+Matplotlib (for plotting graphs)
 
-S - цена актива
+NumPy (for data analysis)
 
-μ - дрейф (средняя доходность)
-
-σ - волатильность
-
-W - винеровский процесс
-
-2. Модель Васичека (для процентных ставок)
-text
-dr = a(b - r) dt + σ dW
-3. Модель Халла-Уайта
-📈 Примеры
-Пример 1: Прогнозирование курса USD/RUB
-cpp
-#include "models/GBM.h"
-#include "simulation/MonteCarlo.h"
-
-int main() {
-    GBM model(75.0,  // начальный курс
-              0.05,   // дрейф (5%)
-              0.2);   // волатильность (20%)
-    
-    MonteCarloSimulator simulator(model);
-    auto results = simulator.run(10000,  // количество симуляций
-                                 252);   // шагов (1 год)
-    
-    // Анализ результатов
-    auto stats = results.calculateStatistics();
-    stats.print();
-    
-    return 0;
-}
-Пример 2: Визуализация результатов
-bash
-# Запуск симуляции
-./monte_carlo_simulator -c configs/usd_rub.json
-
-# Визуализация с помощью Python
-python scripts/visualize.py --input results/simulation.csv --output plots/
-🧪 Тестирование
-Сборка и запуск тестов
-bash
-mkdir build && cd build
-cmake -DBUILD_TESTS=ON ..
-make
-./tests/unit_tests
-Типы тестов
-Unit tests: Тестирование отдельных компонентов
-
-Интеграционные тесты: Тестирование взаимодействия компонентов
-
-Статистические тесты: Проверка корректности распределений
-
-🤝 Вклад в проект
-Мы приветствуем вклады в проект! Пожалуйста, ознакомьтесь с CONTRIBUTING.md для получения подробной информации.
-
-Форкните репозиторий
-
-Создайте ветку для вашей функции (git checkout -b feature/amazing-feature)
-
-Зафиксируйте изменения (git commit -m 'Add some amazing feature')
-
-Отправьте в ветку (git push origin feature/amazing-feature)
-
-Откройте Pull Request
-
-📄 Лицензия
-Этот проект распространяется под лицензией MIT. Подробнее см. в файле LICENSE.
-
-📞 Контакты
-Ваше имя - ваш.email@example.com
-
-Ссылка на проект: https://github.com/ваш-username/currency-monte-carlo
-
-🙏 Благодарности
-Авторам библиотек Eigen и nlohmann/json
-
-Сообществу QuantLib за вдохновение
-
-Всем контрибьюторам проекта
+🛠 Installation & Build
+1. Clone the Repository
