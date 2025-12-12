@@ -1,8 +1,3 @@
-"""
-Advanced visualization module for Monte Carlo simulation results
-Author: [Your Name]
-"""
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
