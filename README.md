@@ -59,6 +59,9 @@ cd currency-monte-carlo
 `git clone https://github.com/your-username/currency-monte-carlo.git`  
 `cd currency-monte-carlo`
 
+`git clone https://github.com/your-username/currency-monte-carlo.git`  
+`cd currency-monte-carlo`
+
 ### 2. Install Dependencies
 
 #### Ubuntu/Debian
@@ -66,3 +69,29 @@ cd currency-monte-carlo
 sudo apt-get update
 sudo apt-get install build-essential cmake libeigen3-dev libomp-dev python3 python3-pip
 pip3 install matplotlib numpy pandas
+./monte_carlo_simulator [OPTIONS]
+
+Required Options (if no config file):
+  -i, --initial-price FLOAT    Initial exchange rate
+  -d, --drift FLOAT            Drift parameter (mean return)
+  -v, --volatility FLOAT       Volatility parameter
+
+Simulation Parameters:
+  -s, --simulations INT        Number of simulations (default: 10000)
+  -t, --time-horizon INT       Time horizon in days (default: 30)
+  -n, --num-steps INT          Number of time steps (default: 252)
+  -m, --model STRING           Model type: GBM, Vasicek, HullWhite (default: GBM)
+
+Output Options:
+  -o, --output FILE            Output file path
+  --format STRING              Output format: csv, json, binary (default: csv)
+  --confidence FLOAT           Confidence level for intervals (default: 0.95)
+
+Performance:
+  --threads INT                Number of threads for OpenMP (default: auto)
+  --seed INT                   Random seed for reproducibility
+
+Miscellaneous:
+  -c, --config FILE            Configuration file (overrides other options)
+  -h, --help                   Show this help message
+  --version                    Show version information
