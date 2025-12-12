@@ -22,7 +22,6 @@ pip install numpy pandas matplotlib
 bash
 python main.py
 Project Structure
-text
 main.py              
 monte_carlo.py      
 data_loader.py      
