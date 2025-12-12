@@ -1,8 +1,6 @@
-# CMakeLists.txt
 cmake_minimum_required(VERSION 3.10)
 project(CurrencyMonteCarlo VERSION 1.0.0 LANGUAGES CXX)
 
-# 设置C++标准
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
@@ -11,7 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(WITH_OPENMP "Use OpenMP for parallel computing" ON)
-option(ENABLE_COVERAGE "Enable code coverage" OFF)
+option(WITH_JSON "Use JSON for configuration" OFF)
 
 # 输出目录
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -21,7 +19,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 # 查找依赖
 find_package(Threads REQUIRED)
 
-# OpenMP
+# OpenMP支持
 if(WITH_OPENMP)
     find_package(OpenMP REQUIRED)
     if(OpenMP_CXX_FOUND)
@@ -36,7 +34,7 @@ include_directories(
     ${CMAKE_SOURCE_DIR}/third_party
 )
 
-# 子目录
+# 主项目
 add_subdirectory(src)
 
 # 测试
@@ -50,12 +48,7 @@ if(BUILD_EXAMPLES)
     add_subdirectory(examples)
 endif()
 
-# 代码覆盖率
-if(ENABLE_COVERAGE)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --coverage")
-endif()
-
-# 安装配置
+# 安装目标
+install(TARGETS currency_simulator DESTINATION bin)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/configs DESTINATION share/currency-monte-carlo)
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/scripts DESTINATION share/currency-monte-carlo)
