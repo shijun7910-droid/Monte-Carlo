@@ -30,7 +30,7 @@ visualization.py
 README.md           
 requirements.txt
 
-Main Features
+#Main Features
 Data Acquisition: Fetch historical exchange rate data from Yahoo Finance
 Monte Carlo Simulation: Forecast exchange rates based on Geometric Brownian Motion
 Risk Analysis: Calculate Value at Risk (VaR)
