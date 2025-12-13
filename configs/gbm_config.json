@@ -1,0 +1,50 @@
+{
+  "model": "GBM",
+  "model_name": "Geometric Brownian Motion",
+  "currency_pair": "USD/RUB",
+  "parameters": {
+    "initial_price": 75.0,
+    "drift": 0.05,
+    "volatility": 0.2,
+    "risk_free_rate": 0.03
+  },
+  "simulation": {
+    "num_simulations": 10000,
+    "num_steps": 252,
+    "dt": 1.0/252.0,
+    "time_horizon_days": 365,
+    "batch_size": 1000,
+    "use_batch_processing": true
+  },
+  "random": {
+    "generator": "normal",
+    "seed": 12345,
+    "mean": 0.0,
+    "stddev": 1.0
+  },
+  "parallel": {
+    "enabled": true,
+    "num_threads": 4
+  },
+  "output": {
+    "save_paths": false,
+    "save_final_prices": true,
+    "save_summary": true,
+    "save_risk_metrics": true,
+    "format": "csv",
+    "prefix": "usd_rub_gbm",
+    "directory": "results"
+  },
+  "analysis": {
+    "confidence_levels": [0.90, 0.95, 0.99],
+    "percentiles": [0.01, 0.05, 0.10, 0.25, 0.50, 0.75, 0.90, 0.95, 0.99],
+    "target_prices": [67.5, 75.0, 82.5, 90.0, 100.0],
+    "risk_analysis": true,
+    "convergence_check": true
+  },
+  "validation": {
+    "validate_parameters": true,
+    "check_convergence": true,
+    "min_simulations": 1000
+  }
+}
