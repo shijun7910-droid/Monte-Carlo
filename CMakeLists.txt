@@ -28,10 +28,9 @@ if(WITH_OPENMP)
     endif()
 endif()
 
-# 包含目录
+# 包含目录 - 修正路径
 include_directories(
-    ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/third_party
+    ${CMAKE_SOURCE_DIR}/include  # 添加这行，确保include目录被包含
 )
 
 # 主项目
