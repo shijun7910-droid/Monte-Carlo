@@ -1,4 +1,3 @@
-#pragma once
 #ifndef MONTECARLO_H
 #define MONTECARLO_H
 
@@ -29,10 +28,7 @@ public:
                        int timeSteps = 252,
                        double timeHorizon = 1.0);
     
-    // 运行模拟
     SimulationResults runSimulation(double initialRate);
-    
-    // 计算风险指标
     RiskMetrics calculateRiskMetrics(const std::vector<double>& finalRates);
 };
 
