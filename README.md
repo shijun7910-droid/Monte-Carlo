@@ -38,7 +38,7 @@ Monte-Carlo-main/
 
 ## Quick Start
 Compilation
-Method 1: Single File Version (Recommended for Beginners)
+### Method 1: Single File Version (Recommended for Beginners)
 - C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2019+)
 - CMake 3.10 or higher
 - Git
