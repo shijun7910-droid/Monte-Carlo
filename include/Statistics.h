@@ -1,19 +1,13 @@
-#pragma once
-#include <vector>
-#include <algorithm>
-#include <cmath>
+#ifndef STATISTICS_H
+#define STATISTICS_H
 
-struct SimulationResults {
-    std::vector<std::vector<double>> paths;
-    std::vector<double> finalValues;
-    std::vector<double> timePoints;
-};
+#include <vector>
 
 struct RiskMetrics {
     double mean;
     double standardDeviation;
-    double var95;        // 95% VaR
-    double cvar95;       // 95% CVaR
+    double var95;
+    double cvar95;
     double minValue;
     double maxValue;
     double median;
@@ -29,6 +23,7 @@ public:
     static double conditionalVaR(const std::vector<double>& data, double confidence);
     static std::vector<double> computePercentiles(const std::vector<double>& data, 
                                                  const std::vector<double>& probs);
-    
     static RiskMetrics calculateMetrics(const std::vector<double>& data);
 };
+
+#endif // STATISTICS_H
