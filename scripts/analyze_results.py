@@ -1,3 +1,4 @@
+
 import pandas as pd
 import numpy as np
 import scipy.stats as stats
@@ -155,4 +156,148 @@ class ResultAnalyzer:
                 start = i * (n // batch_size)
                 end = (i + 1) * (n // batch_size) if i < batch_size - 1 else n
                 batch = prices_series[start:end]
-                batch_means.append(b
+                batch_means.append(batch.mean())
+            
+            # Calculate batch statistics
+            batch_mean = np.mean(batch_means)
+            batch_std = np.std(batch_means, ddof=1)
+            standard_error = batch_std / np.sqrt(batch_size)
+            relative_error = standard_error / abs(batch_mean) if batch_mean != 0 else standard_error
+            
+            convergence_results[f'batch_{batch_size}'] = {
+                'batch_mean': float(batch_mean),
+                'batch_std': float(batch_std),
+                'standard_error': float(standard_error),
+                'relative_error': float(relative_error),
+                'converged': relative_error < 0.01
+            }
+        
+        return convergence_results
+    
+    def generate_report(self, filepath, output_dir="reports"):
+        """Generate comprehensive analysis report."""
+        df = self.load_results(filepath)
+        if df is None:
+            return
+        
+        # Create output directory
+        output_path = Path(output_dir)
+        output_path.mkdir(exist_ok=True, parents=True)
+        
+        filename = Path(filepath).stem
+        report = {
+            'file': filepath,
+            'timestamp': pd.Timestamp.now().isoformat(),
+            'data_summary': {
+                'rows': len(df),
+                'columns': len(df.columns),
+                'column_names': df.columns.tolist()
+            }
+        }
+        
+        # Analyze each column
+        for column in df.columns:
+            series = df[column]
+            
+            column_report = {
+                'statistics': self.calculate_statistics(series),
+                'normality_tests': self.test_normality(series),
+                'convergence_analysis': self.analyze_convergence(series)
+            }
+            
+            # If column looks like returns, add risk metrics
+            if series.mean() < 1 and series.std() < 1:  # Heuristic for returns
+                column_report['risk_metrics'] = self.calculate_risk_metrics(series)
+            
+            report[column] = column_report
+        
+        # Save report as JSON
+        json_file = output_path / f"{filename}_analysis.json"
+        with open(json_file, 'w') as f:
+            json.dump(report, f, indent=2, default=str)
+        
+        # Save summary as CSV
+        summary_data = []
+        for column, analysis in report.items():
+            if column not in ['file', 'timestamp', 'data_summary']:
+                stats = analysis.get('statistics', {})
+                summary_data.append({
+                    'column': column,
+                    'mean': stats.get('mean', np.nan),
+                    'median': stats.get('median', np.nan),
+                    'std': stats.get('std', np.nan),
+                    'min': stats.get('min', np.nan),
+                    'max': stats.get('max', np.nan),
+                    'skewness': stats.get('skewness', np.nan),
+                    'kurtosis': stats.get('kurtosis', np.nan),
+                    'normal_distribution': analysis.get('normality_tests', {})
+                                               .get('shapiro_wilk', {})
+                                               .get('normal', False)
+                })
+        
+        summary_df = pd.DataFrame(summary_data)
+        csv_file = output_path / f"{filename}_summary.csv"
+        summary_df.to_csv(csv_file, index=False)
+        
+        print(f"Report saved to {json_file}")
+        print(f"Summary saved to {csv_file}")
+        
+        # Print key findings
+        self._print_summary(report)
+    
+    def _print_summary(self, report):
+        """Print summary of analysis results."""
+        print("\n" + "="*60)
+        print("ANALYSIS SUMMARY")
+        print("="*60)
+        
+        for column, analysis in report.items():
+            if column not in ['file', 'timestamp', 'data_summary']:
+                print(f"\nColumn: {column}")
+                print("-"*40)
+                
+                stats = analysis.get('statistics', {})
+                if stats:
+                    print(f"Statistics:")
+                    print(f"  Count: {stats.get('count', 'N/A'):,}")
+                    print(f"  Mean: {stats.get('mean', 'N/A'):.4f}")
+                    print(f"  Std Dev: {stats.get('std', 'N/A'):.4f}")
+                    print(f"  Min: {stats.get('min', 'N/A'):.4f}")
+                    print(f"  Max: {stats.get('max', 'N/A'):.4f}")
+                
+                normality = analysis.get('normality_tests', {})
+                if normality and not normality.get('insufficient_data', False):
+                    sw_test = normality.get('shapiro_wilk', {})
+                    print(f"\nNormality Test (Shapiro-Wilk):")
+                    print(f"  Statistic: {sw_test.get('statistic', 'N/A'):.4f}")
+                    print(f"  p-value: {sw_test.get('p_value', 'N/A'):.4f}")
+                    print(f"  Normal distribution: {'Yes' if sw_test.get('normal', False) else 'No'}")
+                
+                risk_metrics = analysis.get('risk_metrics', {})
+                if risk_metrics:
+                    print(f"\nRisk Metrics:")
+                    print(f"  Annualized Return: {risk_metrics.get('annualized_return', 'N/A'):.2%}")
+                    print(f"  Annualized Volatility: {risk_metrics.get('annualized_volatility', 'N/A'):.2%}")
+                    print(f"  Sharpe Ratio: {risk_metrics.get('sharpe_ratio', 'N/A'):.2f}")
+                    print(f"  95% VaR: {risk_metrics.get('var_95', 'N/A'):.2%}")
+                    print(f"  95% CVaR: {risk_metrics.get('cvar_95', 'N/A'):.2%}")
+                    print(f"  Max Drawdown: {risk_metrics.get('max_drawdown', 'N/A'):.2%}")
+
+def main():
+    parser = argparse.ArgumentParser(description='Analyze Monte Carlo simulation results')
+    parser.add_argument('input_file', type=str, help='Input CSV file with simulation results')
+    parser.add_argument('--output-dir', type=str, default='reports',
+                       help='Output directory for analysis reports')
+    parser.add_argument('--column', type=str, help='Specific column to analyze')
+    parser.add_argument('--risk-free-rate', type=float, default=0.03,
+                       help='Risk-free rate for risk metrics calculation')
+    
+    args = parser.parse_args()
+    
+    analyzer = ResultAnalyzer()
+    
+    # Generate comprehensive report
+    analyzer.generate_report(args.input_file, args.output_dir)
+
+if __name__ == "__main__":
+    main()
