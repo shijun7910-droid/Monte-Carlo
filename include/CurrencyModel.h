@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CURRENCYMODEL_H
+#define CURRENCYMODEL_H
+
 #include <vector>
 #include <cmath>
 
@@ -10,8 +13,6 @@ public:
                                              double timeHorizon,
                                              int steps,
                                              const std::vector<double>& randomNumbers) = 0;
-    virtual double drift(double rate, double time) = 0;
-    virtual double diffusion(double rate, double time) = 0;
 };
 
 // 几何布朗运动模型 (GBM)
@@ -26,8 +27,6 @@ public:
                                      double timeHorizon,
                                      int steps,
                                      const std::vector<double>& randomNumbers) override;
-    double drift(double rate, double time) override;
-    double diffusion(double rate, double time) override;
 };
 
 // 均值回归模型 (Vasicek)
@@ -43,6 +42,6 @@ public:
                                      double timeHorizon,
                                      int steps,
                                      const std::vector<double>& randomNumbers) override;
-    double drift(double rate, double time) override;
-    double diffusion(double rate, double time) override;
 };
+
+#endif // CURRENCYMODEL_H
