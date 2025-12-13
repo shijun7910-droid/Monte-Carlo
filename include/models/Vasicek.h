@@ -14,35 +14,24 @@ private:
     
 public:
     Vasicek(double initialRate = 0.05, double speed = 1.0, 
-            double longTermMean = 0.05, double volatility = 0.02)
-        : r0_(initialRate), theta_(speed), mu_(longTermMean), sigma_(volatility) {}
+            double longTermMean = 0.05, double volatility = 0.02);
     
-    std::string getName() const override {
-        return "Vasicek Model";
-    }
+    std::string getName() const override;
+    double simulate(double S0, double dt, double random) const override;
     
-    double simulate(double S0, double dt, double random) const override {
-        return S0 + theta_ * (mu_ - S0) * dt + sigma_ * std::sqrt(dt) * random;
-    }
+    double getInitialPrice() const override;
+    double getDrift() const override;
+    double getVolatility() const override;
+    double getMeanReversion() const override;
+    double getLongTermMean() const override;
     
-    double getInitialPrice() const override { return r0_; }
-    double getDrift() const override { return mu_; }
-    double getVolatility() const override { return sigma_; }
-    double getMeanReversion() const override { return theta_; }
-    double getLongTermMean() const override { return mu_; }
+    void setParameters(const std::vector<double>& params) override;
+    std::vector<double> getParameters() const override;
     
-    void setParameters(const std::vector<double>& params) override {
-        if (params.size() >= 4) {
-            r0_ = params[0];
-            theta_ = params[1];
-            mu_ = params[2];
-            sigma_ = params[3];
-        }
-    }
-    
-    std::vector<double> getParameters() const override {
-        return {r0_, theta_, mu_, sigma_};
-    }
+    // Additional methods
+    bool validateParameters() const;
+    double expectedValue(double t) const;
+    double variance(double t) const;
 };
 
 #endif // VASICEK_H
