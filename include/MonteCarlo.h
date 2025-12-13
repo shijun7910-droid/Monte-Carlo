@@ -1,0 +1,28 @@
+#pragma once
+#include <vector>
+#include <memory>
+#include "CurrencyModel.h"
+#include "RandomGenerator.h"
+#include "Statistics.h"
+
+class MonteCarloSimulator {
+private:
+    std::unique_ptr<CurrencyModel> model;
+    std::unique_ptr<RandomGenerator> randomGen;
+    int numSimulations;
+    int timeSteps;
+    double timeHorizon;
+    
+public:
+    MonteCarloSimulator(std::unique_ptr<CurrencyModel> model,
+                       std::unique_ptr<RandomGenerator> randomGen,
+                       int numSimulations = 10000,
+                       int timeSteps = 252,
+                       double timeHorizon = 1.0);
+    
+    // 运行模拟
+    SimulationResults runSimulation(double initialRate);
+    
+    // 计算风险指标
+    RiskMetrics calculateRiskMetrics(const std::vector<double>& finalRates);
+};
