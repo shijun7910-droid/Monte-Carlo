@@ -2,6 +2,7 @@
 #define RANDOMGENERATOR_H
 
 #include <vector>
+#include <random>  // 需要包含random头文件
 
 class RandomGenerator {
 public:
