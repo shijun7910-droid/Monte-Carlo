@@ -18,20 +18,26 @@ User-Friendly: Interactive menus, multiple example programs
 
 ---
 
-## ✨ Features
-- **Multiple Stochastic Models**: GBM, Vasicek, Hull-White, and more
-- **High Performance**: Parallel computation with OpenMP
-- **Flexible Configuration**: JSON-based configuration files
-- **Multiple Output Formats**: CSV, JSON, and binary formats
-- **Visualization Tools**: Python scripts for result plotting
-- **Statistical Analysis**: VaR, CVaR, confidence intervals
-- **Modular Design**: Easy to extend with new models
+## Project Structure
+Monte-Carlo-main/
+├── main.cpp                 # Main program
+├── example.cpp             # Collection of examples
+├── all_in_one.cpp          # Single-file complete version
+├── simple_test.cpp         # Minimal test version
+├── CMakeLists.txt          # CMake build configuration
+├── include/                # Header files
+│   ├── MonteCarlo.h       # Main simulator interface
+│   ├── CurrencyModel.h    # Financial model definitions
+│   ├── RandomGenerator.h  # Random number generation
+│   └── Statistics.h       # Statistical calculations
+├── src/                   # Source implementations
+└── scripts/              # Python visualization scripts
 
 ---
 
-## 📦 Requirements
-
-### Essential
+## Quick Start
+Compilation
+Method 1: Single File Version (Recommended for Beginners)
 - C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2019+)
 - CMake 3.10 or higher
 - Git
