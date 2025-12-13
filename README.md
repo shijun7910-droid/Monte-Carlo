@@ -19,6 +19,7 @@ User-Friendly: Interactive menus, multiple example programs
 ---
 
 ## Project Structure
+```bash
 Monte-Carlo-main/
 ├── main.cpp                 # Main program
 ├── example.cpp             # Collection of examples
@@ -32,7 +33,7 @@ Monte-Carlo-main/
 │   └── Statistics.h       # Statistical calculations
 ├── src/                   # Source implementations
 └── scripts/              # Python visualization scripts
-
+```
 ---
 
 ## Quick Start
