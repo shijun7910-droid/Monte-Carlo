@@ -36,53 +36,36 @@ Monte-Carlo-main/
 ```
 ---
 
-## Quick Start
-Compilation
-### Method 1: Single File Version (Recommended for Beginners)
-- C++17 compatible compiler (GCC 7+, Clang 5+, MSVC 2019+)
-- CMake 3.10 or higher
-- Git
-
-### Libraries
-- **Eigen3** (linear algebra operations)
-- **OpenMP** (optional, for parallel computation)
-- **nlohmann/json** (JSON parsing and generation)
-
-### Optional
-- **Python 3.7+** (for visualization scripts)
-- **Matplotlib** (for plotting graphs)
-- **NumPy** (for data analysis)
-
----
-
-## 🛠 Installation & Build
-
-### 1. Clone the Repository
+## Running Programs
 ```bash
-git clone https://github.com/your-username/currency-monte-carlo.git
-cd currency-monte-carlo
+g++ -std=c++17 -o2 -o main main.cpp src/MonteCarlo.cpp src/RandomGenerator.cpp src/CurrencyModel.cpp src/Statistics.cpp
+./main
 ```
 
-### 2. Install Dependencies
-Ubuntu/Debian
+## Feature Demonstration
+### 1. Basic GBM Simulation
 ```bash
-sudo apt-get update
-sudo apt-get install build-essential cmake libeigen3-dev libomp-dev python3 python3-pip
-pip3 install matplotlib numpy pandas
+// Create GBM model
+auto model = std::make_unique<GBM>(0.02, 0.15);  // 2% return, 15% volatility
+auto randomGen = std::make_unique<MersenneTwister>(42);
+
+// Run simulation
+MonteCarloSimulator simulator(std::move(model), std::move(randomGen),
+                              10000, 252, 1.0);
+auto results = simulator.runSimulation(0.92);  // Initial exchange rate
 ```
-macOS
+Sample Output:
 ```bash
-brew install cmake eigen openmp python3
-pip3 install matplotlib numpy pandas
+=== GBM Model Simulation USD/EUR Exchange Rate ===
+Mean: 0.9382
+Standard Deviation: 0.1414
+95% VaR: 0.7248
+95% CVaR: 0.6798
+Probability of increase: 51.60%
 ```
-Windows
-```bash
-vcpkg install eigen3
-```
-### 3. Build the Project
-```bash
-# Create build directory
-mkdir build && cd build
+
+
+
 
 # Configure with CMake
 cmake .. -DCMAKE_BUILD_TYPE=Release
