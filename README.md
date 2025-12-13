@@ -234,18 +234,10 @@ currency-monte-carlo/
 │   └── requirements.txt        # Python dependencies
 │
 ├── configs/                    # Configuration files
-│   ├── gbm_config.json
-│   ├── vasicek_config.json
-│   ├── eur_usd.json
-│   └── usd_rub.json
-│
-├── results/                    # Simulation results
-│   ├── .gitkeep
-│   └── README.md
-│
-└── third_party/                # Third-party dependencies
-    └── json/                   # nlohmann/json single header
-```
+    ├── gbm_config.json
+    ├── vasicek_config.json
+    ├── eur_usd.json
+    └── usd_rub.json
 
 ## 📈 Examples
 Example 1: Basic USD/RUB Forecast
