@@ -1,5 +1,4 @@
 #include "../include/MonteCarlo.h"
-#include <iostream>
 #include <algorithm>
 
 MonteCarloSimulator::MonteCarloSimulator(std::unique_ptr<CurrencyModel> model,
@@ -14,21 +13,21 @@ MonteCarloSimulator::MonteCarloSimulator(std::unique_ptr<CurrencyModel> model,
 SimulationResults MonteCarloSimulator::runSimulation(double initialRate) {
     SimulationResults results;
     
-    // 初始化时间点
+    // Initialize time points
     results.timePoints.resize(timeSteps);
     double dt = timeHorizon / timeSteps;
     for (int i = 0; i < timeSteps; ++i) {
         results.timePoints[i] = i * dt;
     }
     
-    // 初始化路径存储
+    // Initialize path storage
     results.paths.resize(numSimulations);
     results.finalValues.resize(numSimulations);
     
-    // 生成所有随机数
+    // Generate all random numbers
     auto allRandomNumbers = randomGen->generateNormalMatrix(numSimulations, timeSteps);
     
-    // 并行生成所有路径
+    // Generate all paths
     for (int sim = 0; sim < numSimulations; ++sim) {
         results.paths[sim] = model->generatePath(initialRate, timeHorizon, 
                                                 timeSteps, allRandomNumbers[sim]);
