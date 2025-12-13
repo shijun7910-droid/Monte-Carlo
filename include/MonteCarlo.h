@@ -1,9 +1,18 @@
 #pragma once
+#ifndef MONTECARLO_H
+#define MONTECARLO_H
+
 #include <vector>
 #include <memory>
 #include "CurrencyModel.h"
 #include "RandomGenerator.h"
 #include "Statistics.h"
+
+struct SimulationResults {
+    std::vector<std::vector<double>> paths;
+    std::vector<double> finalValues;
+    std::vector<double> timePoints;
+};
 
 class MonteCarloSimulator {
 private:
@@ -26,3 +35,5 @@ public:
     // 计算风险指标
     RiskMetrics calculateRiskMetrics(const std::vector<double>& finalRates);
 };
+
+#endif // MONTECARLO_H
