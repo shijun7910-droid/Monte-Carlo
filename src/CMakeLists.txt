@@ -1,22 +1,37 @@
-# 设置包含目录
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../include)
+# src/CMakeLists.txt
 
-# 添加所有源文件
-file(GLOB_RECURSE SOURCES "*.cpp")
-
-# 创建可执行文件
-add_executable(currency_simulator main.cpp ${SOURCES})
-
-# 设置属性
-set_target_properties(currency_simulator PROPERTIES
-    CXX_STANDARD 17
-    CXX_STANDARD_REQUIRED ON
-    CXX_EXTENSIONS OFF
+# 源文件列表
+set(SOURCE_FILES
+    main.cpp
+    models/GBM.cpp
+    models/Vasicek.cpp
+    models/HullWhite.cpp
+    random/NormalGenerator.cpp
+    random/SobolGenerator.cpp
+    statistics/Statistics.cpp
+    statistics/RiskMetrics.cpp
+    statistics/Convergence.cpp
+    simulation/MonteCarloSimulator.cpp
+    simulation/PathGenerator.cpp
+    simulation/ResultAnalyzer.cpp
+    utils/CSVWriter.cpp
+    utils/JSONConfig.cpp
+    utils/Timer.cpp
+    utils/Logger.cpp
 )
 
-# 链接库
-target_link_libraries(currency_simulator Threads::Threads)
+# 创建可执行文件
+add_executable(currency_simulator ${SOURCE_FILES})
 
-if(OpenMP_CXX_FOUND)
-    target_link_libraries(currency_simulator OpenMP::OpenMP_CXX)
+# 链接库
+target_link_libraries(currency_simulator PRIVATE Threads::Threads)
+
+# 添加包含目录
+target_include_directories(currency_simulator PRIVATE 
+    ${CMAKE_SOURCE_DIR}/include
+)
+
+# 如果使用OpenMP
+if(WITH_OPENMP AND OpenMP_CXX_FOUND)
+    target_link_libraries(currency_simulator PRIVATE OpenMP::OpenMP_CXX)
 endif()
