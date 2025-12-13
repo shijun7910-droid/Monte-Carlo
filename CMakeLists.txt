@@ -1,25 +1,25 @@
 cmake_minimum_required(VERSION 3.10)
-project(CurrencyMonteCarlo VERSION 1.0.0 LANGUAGES CXX)
+project(CurrencyMonteCarlo)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# 设置包含目录
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+# 源文件列表
+set(SOURCES
+    main.cpp
+    src/MonteCarlo.cpp
+    src/RandomGenerator.cpp
+    src/CurrencyModel.cpp
+    src/Statistics.cpp
+)
+
 # 可执行文件
-add_executable(currency_mc
-    src/main.cpp
-    src/models/GBM.cpp
-    src/random/RandomGenerator.cpp
-    src/utils/CSVWriter.cpp
-)
+add_executable(currency_mc ${SOURCES})
 
-# 包含目录
-target_include_directories(currency_mc PRIVATE include)
-
-# 示例
-add_executable(example
-    examples/example.cpp
-    src/models/GBM.cpp
-    src/random/RandomGenerator.cpp
-    src/utils/CSVWriter.cpp
-)
-target_include_directories(example PRIVATE include)
+# 在Windows上可能需要链接数学库
+if(WIN32)
+    target_link_libraries(currency_mc)
+endif()
