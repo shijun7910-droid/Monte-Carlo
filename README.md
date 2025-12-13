@@ -63,275 +63,54 @@ Standard Deviation: 0.1414
 95% CVaR: 0.6798
 Probability of increase: 51.60%
 ```
-
-
-
-
-# Configure with CMake
-cmake .. -DCMAKE_BUILD_TYPE=Release
-
-# Build the project
-cmake --build . --config Release --parallel 4
-```
-### 4. Run Quick Test
+### 2. Mean Reversion Model
 ```bash
-# Navigate back to project root
-cd ..
-
-# Run a simple simulation
-./build/monte_carlo_simulator --help
+// Create Vasicek model
+auto model = std::make_unique<Vasicek>(0.1, 0.05, 0.02);
+auto results = simulator.runSimulation(0.06);  // Initial interest rate 6%
 ```
-## 🚀 Usage
-Basic Simulation
+
+### 3. Risk Analysis
 ```bash
-# Using configuration file
-./build/monte_carlo_simulator --config configs/gbm_config.json
+// Calculate risk metrics at different confidence levels
+double var95 = Statistics::valueAtRisk(results, 0.95);
+double cvar95 = Statistics::conditionalVaR(results, 0.95);
+```
 
-# Using command line arguments
-./build/monte_carlo_simulator \
-  --model GBM \
-  --initial-price 75.0 \
-  --drift 0.05 \
-  --volatility 0.2 \
-  --time-horizon 30 \
-  --simulations 10000 \
-  --output results/simulation.csv
-```
-Configuration File Example
-Create configs/usd_rub_simulation.json:
-```json
-{
-  "simulation": {
-    "model": "GBM",
-    "parameters": {
-      "initial_price": 75.0,
-      "drift": 0.05,
-      "volatility": 0.2,
-      "risk_free_rate": 0.03
-    },
-    "simulation_params": {
-      "num_simulations": 10000,
-      "num_steps": 252,
-      "time_horizon_days": 365
-    },
-    "output": {
-      "format": "csv",
-      "filename": "results/usd_rub_forecast.csv",
-      "save_raw_paths": false,
-      "confidence_levels": [0.95, 0.99]
-    },
-    "random": {
-      "seed": 42,
-      "generator": "mt19937"
-    }
-  }
-}
-```
-Command Line Reference
+## Practical Applications
+### Exchange Rate Forecasting
 ```bash
-./monte_carlo_simulator [OPTIONS]
-
-Required Options (if no config file):
-  -i, --initial-price FLOAT    Initial exchange rate
-  -d, --drift FLOAT            Drift parameter (mean return)
-  -v, --volatility FLOAT       Volatility parameter
-
-Simulation Parameters:
-  -s, --simulations INT        Number of simulations (default: 10000)
-  -t, --time-horizon INT       Time horizon in days (default: 30)
-  -n, --num-steps INT          Number of time steps (default: 252)
-  -m, --model STRING           Model type: GBM, Vasicek, HullWhite (default: GBM)
-
-Output Options:
-  -o, --output FILE            Output file path
-  --format STRING              Output format: csv, json, binary (default: csv)
-  --confidence FLOAT           Confidence level for intervals (default: 0.95)
-
-Performance:
-  --threads INT                Number of threads for OpenMP (default: auto)
-  --seed INT                   Random seed for reproducibility
-
-Miscellaneous:
-  -c, --config FILE            Configuration file (overrides other options)
-  -h, --help                   Show this help message
-  --version                    Show version information
+// Forecast USD/JPY rate after one year
+double initialJPY = 110.50;  // 1 USD = 110.50 JPY
+GBM usdJpyModel(0.01, 0.12); // 1% return, 12% volatility
+// Run 10,000 simulations...
 ```
-
-## 📁 Project Structure
+### Scenario Analysis
 ```bash
-currency-monte-carlo/
-├── CMakeLists.txt              # CMake build configuration
-├── README.md                   # This file
-├── LICENSE                     # MIT License
-│
-├── include/                    # Header files
-│   ├── models/                 # Pricing models
-│   │   ├── StochasticModel.h
-│   │   ├── GBM.h
-│   │   ├── Vasicek.h
-│   │   └── HullWhite.h
-│   │
-│   ├── random/                 # Random number generation
-│   │   ├── RandomGenerator.h
-│   │   ├── NormalGenerator.h
-│   │   └── SobolGenerator.h
-│   │
-│   ├── statistics/             # Statistical functions
-│   │   ├── Statistics.h
-│   │   ├── RiskMetrics.h
-│   │   └── Convergence.h
-│   │
-│   ├── simulation/             # Simulation engine
-│   │   ├── MonteCarloSimulator.h
-│   │   ├── PathGenerator.h
-│   │   └── ResultAnalyzer.h
-│   │
-│   └── utils/                  # Utility functions
-│       ├── CSVWriter.h
-│       ├── JSONConfig.h
-│       ├── Timer.h
-│       └── Logger.h
-│
-├── src/                        # Source code
-│   ├── main.cpp                # Main entry point
-│   ├── models/
-│   ├── random/
-│   ├── statistics/
-│   ├── simulation/
-│   └── utils/
-│
-├── tests/                      # Unit tests
-│   ├── unit_tests.cpp
-│   ├── test_models.cpp
-│   ├── test_statistics.cpp
-│   └── CMakeLists.txt
-│
-├── examples/                   # Example programs
-│   ├── basic_simulation.cpp
-│   ├── multi_currency.cpp
-│   ├── risk_analysis.cpp
-│   └── CMakeLists.txt
-│
-├── scripts/                    # Python scripts
-│   ├── visualize.py            # Result visualization
-│   ├── analyze_results.py      # Statistical analysis
-│   ├── plot_distribution.py    # Distribution plotting
-│   └── requirements.txt        # Python dependencies
-│
-├── configs/                    # Configuration files
-    ├── gbm_config.json
-    ├── vasicek_config.json
-    ├── eur_usd.json
-    └── usd_rub.json
-
-## 📈 Examples
-Example 1: Basic USD/RUB Forecast
-```bush
-#include <iostream>
-#include "models/GBM.h"
-#include "simulation/MonteCarloSimulator.h"
-#include "statistics/Statistics.h"
-
-int main() {
-    // Create GBM model for USD/RUB
-    GBM model(75.0,     // Initial exchange rate
-              0.05,     // Drift (5% annual return)
-              0.2,      // Volatility (20% annual)
-              0.03);    // Risk-free rate (3%);
-    
-    // Configure Monte Carlo simulator
-    MonteCarloSimulator simulator(model);
-    simulator.setSeed(12345);          // For reproducibility
-    simulator.setNumThreads(4);        // Use 4 CPU cores
-    
-    // Run simulation
-    auto results = simulator.runSimulation(
-        10000,    // 10,000 simulations
-        252,      // 252 trading days (1 year)
-        365.0/252 // Time step (1 day)
-    );
-    
-    // Analyze results
-    ResultAnalyzer analyzer(results);
-    
-    // Calculate statistics
-    auto stats = analyzer.calculateStatistics();
-    
-    // Print results
-    std::cout << "Simulation Results:\n";
-    std::cout << "===================\n";
-    std::cout << "Initial Rate: " << model.getInitialPrice() << "\n";
-    std::cout << "Mean Forecast: " << stats.mean << "\n";
-    std::cout << "Median Forecast: " << stats.median << "\n";
-    std::cout << "Std Deviation: " << stats.stdDev << "\n";
-    std::cout << "95% Confidence Interval: [" 
-              << stats.confidenceInterval95.first << ", "
-              << stats.confidenceInterval95.second << "]\n";
-    std::cout << "Value at Risk (95%): " << stats.var95 << "\n";
-    std::cout << "Conditional VaR (95%): " << stats.cvar95 << "\n";
-    
-    // Save results to CSV
-    results.saveToCSV("usd_rub_forecast.csv");
-    
-    return 0;
-}
+// Compare different volatility scenarios
+vector<Scenario> scenarios = {
+    {"Low Volatility", 0.02, 0.08},
+    {"Medium Volatility", 0.02, 0.15},
+    {"High Volatility", 0.02, 0.25}
+};
 ```
-Example 2: Multi-Currency Simulation
-```
-#include <vector>
-#include "models/GBM.h"
-#include "simulation/MultiAssetSimulator.h"
 
-int main() {
-    // Create models for different currency pairs
-    std::vector<std::shared_ptr<StochasticModel>> models = {
-        std::make_shared<GBM>(1.10, 0.02, 0.15, 0.01),  // EUR/USD
-        std::make_shared<GBM>(1.30, 0.03, 0.18, 0.01),  // GBP/USD
-        std::make_shared<GBM>(110.0, 0.01, 0.12, 0.01)  // USD/JPY
-    };
-    
-    // Correlation matrix
-    Eigen::MatrixXd correlation(3, 3);
-    correlation << 1.0, 0.7, 0.3,
-                   0.7, 1.0, 0.4,
-                   0.3, 0.4, 1.0;
-    
-    // Create multi-asset simulator
-    MultiAssetSimulator simulator(models, correlation);
-    
-    // Run correlated simulation
-    auto results = simulator.run(5000, 252);
-    
-    // Calculate portfolio statistics
-    auto portfolioStats = results.calculatePortfolioStatistics();
-    
-    return 0;
-}
-```
-## 🧪 Testing
-Running Tests
-```bush
-# Build and run all tests
-cd build
-cmake -DBUILD_TESTS=ON ..
-make
-ctest --output-on-failure
+## Validation Examples
+### Sample Output Validation
+```bash
+Monte Carlo Simulation Test Program
+====================================
+1. Testing Random Number Generator:
+10 random numbers: 0.5951 0.0418 0.8004 -0.0719 -1.0431 ...
 
-# Run specific test
-./tests/unit_tests --gtest_filter="GBMTest.*"
+2. Testing GBM Model:
+GBM path (10 steps): 1.0295 1.0325 1.0734 1.0707 1.0199 ...
 
-# Run with valgrind for memory checking
-valgrind --leak-check=full ./tests/unit_tests
+3. Running Monte Carlo Simulation:
+Number of simulations: 1000
+Mean final rate: 102.03
+Standard deviation: 15.33
+Probability of increase: 51.60%
 ```
-Test Coverage
-```bush
-# Generate coverage report
-mkdir build-coverage && cd build-coverage
-cmake -DCMAKE_BUILD_TYPE=Debug -DENABLE_COVERAGE=ON ..
-make
-./tests/unit_tests
-lcov --capture --directory . --output-file coverage.info
-genhtml coverage.info --output-directory coverage_report
-```
-## 📄 License
-This project is licensed under the MIT License - see the LICENSE file for details
+##  License
+MIT License - See LICENSE file for details
