@@ -179,11 +179,6 @@ currency-monte-carlo/
 ├── README.md                   # This file
 ├── LICENSE                     # MIT License
 │
-├── docs/                       # Documentation
-│   ├── API.md                  # API documentation
-│   ├── MODELS.md               # Mathematical models
-│   └── EXAMPLES.md             # Detailed examples
-│
 ├── include/                    # Header files
 │   ├── models/                 # Pricing models
 │   │   ├── StochasticModel.h
