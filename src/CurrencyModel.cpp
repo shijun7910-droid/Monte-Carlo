@@ -1,8 +1,10 @@
-#include "CurrencyModel.h"
+#include "../include/CurrencyModel.h"
 #include <cmath>
+#include <iostream>
 
-// GBM 实现
-GBM::GBM(double mu, double sigma) : mu(mu), sigma(sigma) {}
+GBM::GBM(double mu, double sigma) : mu(mu), sigma(sigma) {
+    std::cout << "GBM Model created with mu=" << mu << ", sigma=" << sigma << std::endl;
+}
 
 std::vector<double> GBM::generatePath(double initialRate, 
                                       double timeHorizon,
@@ -21,17 +23,11 @@ std::vector<double> GBM::generatePath(double initialRate,
     return path;
 }
 
-double GBM::drift(double rate, double time) {
-    return mu * rate;
-}
-
-double GBM::diffusion(double rate, double time) {
-    return sigma * rate;
-}
-
-// Vasicek 实现
 Vasicek::Vasicek(double kappa, double theta, double sigma) 
-    : kappa(kappa), theta(theta), sigma(sigma) {}
+    : kappa(kappa), theta(theta), sigma(sigma) {
+    std::cout << "Vasicek Model created with kappa=" << kappa 
+              << ", theta=" << theta << ", sigma=" << sigma << std::endl;
+}
 
 std::vector<double> Vasicek::generatePath(double initialRate,
                                           double timeHorizon,
@@ -43,18 +39,9 @@ std::vector<double> Vasicek::generatePath(double initialRate,
     
     for (int i = 0; i < steps; i++) {
         double dW = randomNumbers[i] * sqrt(dt);
-        // Euler-Maruyama 方法
         current = current + kappa * (theta - current) * dt + sigma * dW;
         path[i] = current;
     }
     
     return path;
-}
-
-double Vasicek::drift(double rate, double time) {
-    return kappa * (theta - rate);
-}
-
-double Vasicek::diffusion(double rate, double time) {
-    return sigma;
 }
