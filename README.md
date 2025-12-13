@@ -1,25 +1,20 @@
 # Currency Simulation Using Monte Carlo Method
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![C++17](https://img.shields.io/badge/C++-17-blue.svg)](https://en.cppreference.com/w/cpp/17)
-[![CMake 3.10+](https://img.shields.io/badge/CMake-3.10+-064f8c.svg)](https://cmake.org/)
-[![Build Passing](https://img.shields.io/badge/build-passing-brightgreen.svg)](https://github.com/your-username/currency-monte-carlo/actions)
-[![OpenMP Enabled](https://img.shields.io/badge/OpenMP-enabled-blue.svg)](https://www.openmp.org/)
-
-A C++ implementation for simulating future currency exchange rates using Monte Carlo methods with parallel computing capabilities.
+A professional C++ library for simulating and analyzing currency exchange rate movements, supporting multiple stochastic processes and risk management features.
 
 author：Дай Шицзюнь
 ---
 
-## 📋 Table of Contents
-- [✨ Features](#-features)
-- [📦 Requirements](#-requirements)
-- [🛠 Installation & Build](#-installation--build)
-- [🚀 Usage](#-usage)
-- [📁 Project Structure](#-project-structure)
-- [📈 Examples](#-examples)
-- [🧪 Testing](#-testing)
-- [📄 License](#-license)
+## Core Features
+Multiple Models: Geometric Brownian Motion (GBM), Mean Reversion (Vasicek)
+
+Advanced RNG: Mersenne Twister pseudo-random number generator
+
+Comprehensive Risk Analysis: VaR, CVaR, percentile analysis, probability statistics
+
+Result Visualization: Python scripts for professional charts
+
+User-Friendly: Interactive menus, multiple example programs
 
 ---
 
