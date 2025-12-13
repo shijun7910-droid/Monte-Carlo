@@ -1,7 +1,8 @@
-#include "Statistics.h"
+#include "../include/Statistics.h"
 #include <algorithm>
 #include <numeric>
 #include <cmath>
+#include <iostream>
 
 double Statistics::mean(const std::vector<double>& data) {
     if (data.empty()) return 0.0;
@@ -81,7 +82,7 @@ RiskMetrics Statistics::calculateMetrics(const std::vector<double>& data) {
     metrics.var95 = valueAtRisk(sorted, 0.95);
     metrics.cvar95 = conditionalVaR(sorted, 0.95);
     
-    // 计算常用百分位数
+    // Calculate common percentiles
     std::vector<double> probs = {0.01, 0.05, 0.25, 0.75, 0.95, 0.99};
     metrics.percentiles = computePercentiles(sorted, probs);
     
